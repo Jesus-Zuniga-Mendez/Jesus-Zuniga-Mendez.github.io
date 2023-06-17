@@ -86,9 +86,20 @@ function verContenido() {
         if (archivo) {
           archivo.async('uint8array')
             .then(function (contenidoGz) {
-              // Utilizar pako para descomprimir el contenido del archivo .gz
-              var contenidoDescomprimido = pako.inflate(contenidoGz, { to: 'string' });
-              console.log(contenidoDescomprimido);
+              // Utilizar pako para descomprimir el contenido del archivo .gz y verlo en consola
+              // var contenidoDescomprimido = pako.inflate(contenidoGz, { to: 'string' });
+              //console.log(contenidoDescomprimido);
+              // Descomprimir el archivo GZ
+              var descomprimido = pako.inflate(contenidoGz, { to: 'string' });
+              // Crear un enlace de descarga
+              var enlaceDescarga = document.createElement('a');
+              enlaceDescarga.href = URL.createObjectURL(new Blob([descomprimido], { type: 'text/plain' }));
+              enlaceDescarga.download = 'archivo.txt';
+              enlaceDescarga.download = archivoGz.slice(0, -3);
+              // Simular el clic en el enlace de descarga
+              enlaceDescarga.click();
+              // Liberar recursos del enlace de descarga
+              URL.revokeObjectURL(enlaceDescarga.href);
             })
             .catch(function (error) {
               console.error('Error al descomprimir el archivo .gz:', error);
@@ -102,3 +113,6 @@ function verContenido() {
       });
   });
 }
+
+
+
