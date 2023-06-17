@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulador caché multinivel</title>
+    <!--Estilos-->
+    <link href="cache.css" rel="stylesheet" />
+    <!-- Scripts -->
+    <script src="librerias/jszip.min.js"></script>
+    <script src="librerias/pako.js"></script>
+    <script src="cache.js"></script>
+</head>
+<body>
+    <!-- wrapper general, contiene toda la pagina -->
+    <div id="wrapper">
+        <input type="file" id="archivoInput" accept=".zip" onchange="procesarArchivo(this)">
+        <div id ="contenedor2">
+
+        </div>
+        <!-- <ul id="listaArchivos"></ul> -->
+        <!-- <button onclick="seleccionarTodos()">Seleccionar todos</button> -->
+        <!-- <button onclick="verContenido()">Ver contenido</button> -->
+    </div>
+</body>
+</html>
