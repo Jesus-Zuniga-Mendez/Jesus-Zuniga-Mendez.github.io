@@ -5,20 +5,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simulador caché multinivel</title>
     <!--Estilos-->
+    <link rel="shortcut icon" href="../IMAGES/icono.ico" type="image/x-icon">
+    <link rel="icon" href="../IMAGES/icono.ico" type="image/x-icon">
     <link href="cache.css" rel="stylesheet" />
     <!-- Scripts -->
     <script src="librerias/jszip.min.js"></script>
     <script src="librerias/pako.js"></script>
-    <script src="cache.js"></script>
+    <script src="cacheestilo.js"></script>
+    <script src="cachelogica.js"></script>
 </head>
-<body>
-    <!-- wrapper general, contiene toda la pagina -->
-    <div id="wrapper">
-        <input type="file" id="archivoInput" accept=".zip" onchange="procesarArchivo(this)">
-        <div id ="contenedor2">
-            <!-- aqui se crean dinamicamente los controladores de la carga de archivos-->
+<body class="pagina0" onload="ajustarCaracteristicas()">
+    <!-- pagina1 contien el paso 1 -->
+    <div id="pagina1" class="pagina">
+        <div id="contenidoPagina1">
+            <p class="titulo">1: Seleccionar Traces</p>
+            <div class="file-input">
+                <input type="file" id="archivoInput" class="input-file" accept=".zip" onchange="procesarArchivo(this)">
+                <label for="myFile" class="custom-button">Seleccionar archivo</label>
+            </div>
+            <button id="Next1" class="botonNext" onclick="pagina2()">Next</button>
+            <div id ="datosDelZip">
+                <!-- aqui se crean dinamicamente los controladores de la carga de archivos-->
+            </div>                      
         </div>
     </div>
-    
+    <!-- pagina2 contien el paso 2 -->
+    <div id="pagina2" class="pagina">
+        <div id="contenidoPagina2">
+            <p class="titulo">2: Caracteristicas del caché</p>
+            <div>
+            <table class="tabla" id="tabla">
+                <!--Fila Encabezado-->
+                <tr>
+                    <th style="background-color: rgba(0, 0, 0, 0); border-radius: 0px 0px 0px 0px;"></th>
+                    <th>L1</th>
+                    <th>L2</th>
+                    <th>L3</th>
+                </tr>                
+                <!--Fila Capacidad-->
+                <tr>
+                    <th>Capacidad (Kb)</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>                                                           
+                </tr>
+                <!--Fila Asociatividad-->
+                <tr>
+                    <th>Asociatividad</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>                                                           
+                </tr>
+                <!--Fila Tamaño bloque-->
+                <tr>
+                    <th>Tamaño del bloque (B)</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>                                                         
+                </tr>  
+                <!--Fila reemplazo-->
+                <tr>
+                    <th>Politica de reemplazo</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>                                                           
+                </tr>
+                <!--Fila hit-->
+                <tr>
+                    <th>Hit time (ciclos)</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>                                                           
+                </tr>    
+                <!--Fila miss-->
+                <tr>
+                    <th>Miss Penalty (ciclos)</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>                                                           
+                </tr>                               
+                <!--Fila sgte nivel-->
+                <tr>
+                    <th>Habilitar el siguiente nivel</th>
+                    <td>
+                        <input type="checkbox" id="checkSgteNivelL1" onchange="bloquearTabla()">
+                    </td>
+                    <td>
+                        <input type="checkbox" id="checkSgteNivelL2" onchange="bloquearTabla()">
+                    </td>
+                    <td>
+                        <!--<input type="checkbox" id="checkSgteNivelL3" onchange="bloquearTabla()">-->
+                    </td>                                                          
+                </tr>                                               
+            </table>
+            </div> 
+            <div>
+              <button id="AddToLis" class="botonNext" onclick="addToLis()">Add to list</button>
+              <button id="Next2" class="botonNext" onclick="pagina3()">Next</button>
+            </div>
+            <div id ="datosSeleccionados">
+                <!-- aqui se crean dinamicamente los controladores de la carga de archivos-->
+                <ul id="listaSimulaciones" class="lista-desplegable"></ul>
+            </div>           
+        </div>
+    </div>
+    <!-- pagina 3 contien el paso 3-->
+    <div id="pagina3" class="pagina">
+        <div id="contenidoPagina2">
+            <p class="titulo">2: Simulación</p>
+            <div>
+                <button id="simCompleta" class="botonNext" onclick="addToLisaaa()">Completa</button>
+                <button id="simStepOnStep" class="botonNext" onclick="pagina3aaa()">Paso a paso</button>
+              </div>   
+        </div>
+    </div>
 </body>
 </html>

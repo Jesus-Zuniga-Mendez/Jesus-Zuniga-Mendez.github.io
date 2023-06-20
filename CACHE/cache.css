@@ -1,0 +1,165 @@
+
+/*estilo del contenedor principal*/
+.pagina0{
+    background-color: rgb(104, 124, 141);
+    padding: 20px;
+}
+/*estilo de contenedor secundario*/
+.pagina{
+    color: rgb(59, 59, 59);
+    background-color: rgb(51, 115, 138);
+    border-color:rgba(142, 143, 145, 0.637);
+    border-width: 5px;
+    border-style: solid;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centrado horizontal */
+    border-radius: 20px 20px 20px 20px;
+    margin: 20px;
+}
+/*estilo texto para titulos*/
+.titulo{
+    text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.664);
+    /*-webkit-text-stroke: 2px rgba(0, 0, 0, 0.418);*/
+    font-weight: bold;
+    font-size: 40px;
+    color: rgb(255, 255, 255);
+    /*background-color: black;*/
+}
+/*estilo del boton siguiente*/
+.botonNext{
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgb(255, 255, 255); 
+    color: rgb(255, 255, 255);
+    border-radius: 10px;
+    border-color:rgba(0, 0, 0, 0.116);
+    border-style: solid;
+    cursor: pointer;
+    padding: 12px 24px;
+    font-size: 20px;
+    background: linear-gradient(to bottom, rgb(0, 20, 70), rgb(0, 70, 120));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+/*estilo de los demas botones*/
+.botonNormal {
+    background-color: rgb(150, 200, 220);
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 10px 20px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-top: 10px;
+    background: linear-gradient(to bottom, rgb(0, 32, 112), rgb(0, 104, 179));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+/*efecto de los botones al ser seleccioandos */
+button:hover {
+    transform: translateY(2px);
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.4);
+  }
+
+/*estilo del selector de archivos*/
+.file-input {
+    position: relative;
+    display: inline-block;
+}
+.input-file {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+.custom-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgb(255, 255, 255); 
+    color: rgb(255, 255, 255);
+    border-radius: 10px;
+    border-color:rgba(0, 0, 0, 0.116);
+    border-style: solid;
+    cursor: pointer;
+    padding: 12px 24px;
+    font-size: 20px;
+    background: linear-gradient(to bottom, rgb(0, 20, 70), rgb(0, 70, 120));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+.file-input:hover {
+    transform: translateY(2px);
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.4);
+  }
+/*estilos de lista desplegable*/
+.lista-desplegable li {
+    display: block;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-weight: inherit;
+    font-size: 20px;
+    padding-left: 10px;
+    padding-right: 50px;
+    border: 2px solid rgb(138, 138, 138);
+}
+.lista-desplegable.desplegado {
+    display: none;
+}
+/*estilos de la tabla*/
+.tabla{
+    /*border: 2px solid rgb(138, 138, 138);*/
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 10px;
+    border-radius: 10px;
+}  
+td, th {
+    border-bottom: 1px solid  rgb(138, 138, 138);
+}
+th, td {
+    border-right: 1px solid rgb(138, 138, 138);
+}
+th{
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border-radius: 5px 0px 0px 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+td{
+    position: relative;
+    background-color: rgba(90, 90, 90, 0.61);
+    color: rgb(0, 0, 0);
+    border-radius: 5px 0px 0px 5px;
+    padding-left: 20px;
+    padding-right: 20px;  
+}
+/*clase para desabilar div*/
+.disabled{
+    pointer-events: none;
+    opacity: 0.2;
+  }
+
+/*estilo del boton eliminar de la lista*/
+.eliminar{
+    background-color: rgb(150, 200, 220);
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 5px 5px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;;
+    background: linear-gradient(to bottom, rgb(0, 32, 112), rgb(0, 104, 179));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
