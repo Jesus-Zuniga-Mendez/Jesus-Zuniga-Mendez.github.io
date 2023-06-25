@@ -72,7 +72,7 @@ function simularTrace(verComportamiento,tabla,numeroTablas,trace,totalTraces) {
           var descomprimido = pako.inflate(contenidoGz, { to: 'string' });
           const resultado = obtenerResultado(verComportamiento,tabla,trace,descomprimido);
           resolve(resultado);
-          console.log(trace);
+          //console.log(trace);
           promesasCompletadas++;
           console.log(promesasCompletadas);
           // Actualizar el progreso de la barra
@@ -93,10 +93,44 @@ function simularTrace(verComportamiento,tabla,numeroTablas,trace,totalTraces) {
 }
 
 function obtenerResultado(verComportamiento,tabla,trace,descomprimido) {
+  //variable que alcacenara todos los resultados
+  var resultados = "";
   // Lógica para procesar el archivo y obtener el resultado
-  var resultado ="";
-  console.log(descomprimido);
-  return trace + '\n';
+  //se obtiene la configuracion de los caches
+  var configuracionL1 = [];
+  var configuracionL2 = [];
+  var configuracionL3 = [];
+  //se recorre por filas empezando por L1 --> L2 --L3
+  for (let i = 1; i < tabla.rows.length; i++) {
+    const fila = tabla.rows[i];
+    // Recorrer todas las celdas de la fila actual
+    for (let j = 0; j < fila.cells.length; j++) {
+      const celda = fila.cells[j];
+      // Acceder al contenido de la celda
+      if (i==1){
+        configuracionL1[j] = celda.innerText;
+      }else if (i==2){
+        configuracionL2[j] = celda.innerText;
+      }
+      else if (i==3){
+        configuracionL3[j] = celda.innerText;
+      }
+    }
+  }
+  //se recorre el archivo por lineas y se combierte a binario
+  var nombreTrace = trace.slice(0, -12);
+  var porLineas = descomprimido.split("\n");
+  // Recorrer cada línea del array
+  //se recorre el archivo linea por linea
+  porLineas.forEach(function(linea) {
+    //cada linea esta en formato "tipo hex" entonces se divide por el caracter espacio
+    var infoTransaccion = linea.split(" ");
+    var tipo = infoTransaccion[0];
+    var hexadecimal = infoTransaccion[1];
+    var binario = parseInt(hexadecimal, 16).toString(2);
+    //se modela el cache segun las caracteristicas y la direccion binaria obtenida
+  });
+  return nombreTrace + '\n' + Conversionbinario + '\n';
 }
 
 
