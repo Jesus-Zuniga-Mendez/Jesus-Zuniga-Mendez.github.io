@@ -36,3 +36,120 @@ function verContenido() {
         });
     });
   }
+
+
+
+
+
+
+    function generarGrafico() {
+      var canvas = document.getElementById("grafico");
+      var ctx = canvas.getContext("2d");
+      
+      // Obtener la instancia del gráfico existente si existe
+      var existingChart = Chart.getChart(ctx);
+      
+      // Destruir el gráfico existente si hay uno
+      if (existingChart) {
+        existingChart.destroy();
+      }
+      
+      // Borrar el contenido del canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Datos del gráfico
+      var data = {
+        labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio"],
+        datasets: [
+          {
+            label: "Datos de ejemplo",
+            data: [10, 20, 30, 25, 40, 35],
+            borderColor: "rgba(75, 192, 192, 1)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            fill: true
+          }
+        ]
+      };
+      
+      // Opciones del gráfico
+      var options = {};
+      
+      // Crear y mostrar el nuevo gráfico
+      var grafico = new Chart(ctx, {
+        type: "line",
+        data: data,
+        options: options
+      });
+      
+    }
+
+
+
+    function generarDoble() {
+      var canvas = document.getElementById("grafico");
+      var ctx = canvas.getContext("2d");
+      
+      // Obtener la instancia del gráfico existente si existe
+      var existingChart = Chart.getChart(ctx);
+      
+      // Destruir el gráfico existente si hay uno
+      if (existingChart) {
+        existingChart.destroy();
+      }
+      
+      // Borrar el contenido del canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Datos del gráfico
+      var data = {
+        labels: ["16", "64", "64", "352"],
+        datasets: [
+          {
+            label: "perlbench_s",
+            data: [1.0464400,1.7340800,1.8932300,1.8932300],
+            borderColor: "rgba(75, 192, 192, 1)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            fill: false
+          },
+          {
+            label: "mcf_s",
+            data: [0.2344950,0.3448870,0.3825710,0.3826050],
+            borderColor: "rgba(0, 192, 192, 1)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            fill: false
+          },
+          {
+            label: "lbm_s",
+            data: [0.2069150,0.2527320,0.2699440,0.2701340],
+            borderColor: "rgba(50, 192, 192, 1)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            fill: false
+          },
+          {
+            label: "exchange2_s",
+            data: [,1.1334400,1.1376600,1.1376600],
+            borderColor: "rgba(100, 192, 192, 1)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            fill: false
+          },          
+          {
+            label: "roms_s",
+            data: [0.5524960,0.7426300,0.8993300,0.8831910],
+            borderColor: "rgba(150, 192, 192, 1)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            fill: false
+          }, 
+        // Agrega más datasets si es necesario
+        ]
+      };
+      // Opciones del gráfico
+      var options = {};
+      
+      // Crear y mostrar el nuevo gráfico
+      var grafico = new Chart(ctx, {
+        type: "line",
+        data: data,
+        options: options
+      });
+      
+    }

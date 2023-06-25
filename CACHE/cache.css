@@ -1,4 +1,3 @@
-
 /*estilo del contenedor principal*/
 .pagina0{
     background-color: rgb(104, 124, 141);
@@ -12,11 +11,22 @@
     border-width: 5px;
     border-style: solid;
     padding: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Centrado horizontal */
+    display:grid;
+    /*align-items: center;
+    position: relative;*/
+    justify-content: center;
+    justify-items: center;
     border-radius: 20px 20px 20px 20px;
     margin: 20px;
+}
+/*estilo de contenedor interno*/
+.contenedor{
+    display: block;
+    align-items: center;
+    justify-content: center; /* Centrado horizontal */
+    position: relative;
+    justify-items: center;
+    margin: 0px;
 }
 /*estilo texto para titulos*/
 .titulo{
@@ -111,43 +121,34 @@ button:hover {
 .lista-desplegable.desplegado {
     display: none;
 }
-/*estilos de la tabla*/
-.tabla{
-    /*border: 2px solid rgb(138, 138, 138);*/
-    border-collapse: separate;
-    border-spacing: 0;
-    margin: 10px;
-    border-radius: 10px;
-}  
-td, th {
-    border-bottom: 1px solid  rgb(138, 138, 138);
-}
-th, td {
-    border-right: 1px solid rgb(138, 138, 138);
-}
-th{
-    position: relative;
-    background-color: rgb(255, 255, 255);
-    color: rgb(0, 0, 0);
-    border-radius: 5px 0px 0px 5px;
-    padding-left: 20px;
-    padding-right: 20px;
-}
-td{
-    position: relative;
-    background-color: rgba(90, 90, 90, 0.61);
-    color: rgb(0, 0, 0);
-    border-radius: 5px 0px 0px 5px;
-    padding-left: 20px;
-    padding-right: 20px;  
-}
+
 /*clase para desabilar div*/
 .disabled{
     pointer-events: none;
     opacity: 0.2;
   }
 
-/*estilo del boton eliminar de la lista*/
+
+/*estilos grafico*/
+#grafico {
+    width: 100%;
+    height: 400px; /* Altura deseada */
+    background-color: rgb(255, 255, 255);
+    margin: 20px; 
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centrado horizontal */   
+    border-color:rgba(142, 143, 145, 0.637);
+    border-width: 5px;
+    border-style: solid; 
+    color: rgb(248, 0, 0);
+  }
+
+
+  /*estilo de los contenedores para tablas de simulacion*/
+
+  /*estilo del boton eliminar de la lista*/
 .eliminar{
     background-color: rgb(150, 200, 220);
     color: rgb(255, 255, 255);
@@ -162,4 +163,80 @@ td{
     background: linear-gradient(to bottom, rgb(0, 32, 112), rgb(0, 104, 179));
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    margin-right: 10px;
+}
+/*estilos de la tabla*/
+
+/*estilo de la lista de simulaciones*/
+.lista-simulacion{
+    background-color: rgba(255, 0, 0, 0);
+    list-style-type: none;
+    display: inline-block;
+    padding: 0;
+    margin: 0px;
+    justify-content: center;
+    justify-items: center;
+    display: grid;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+    justify-items: center;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    justify-content: center;
+    justify-items: center;
+  }
+
+
+  /*estilos de la tabla*/ 
+.tabla {
+    border-collapse: collapse;
+    margin: 10px;
+  }
+.tabla th{
+    border-bottom: 1px solid rgb(0, 0, 0);
+    border-right: 1px solid rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+.tabla td{
+    border-bottom: 1px solid rgb(0, 0, 0);
+    border-right: 1px solid rgb(0, 0, 0);
+    background-color: rgb(104, 124, 141);
+    color: rgb(0, 0, 0);
+ 
+}
+
+  /*estilos de la tabla de simulaciones*/ 
+  .tablaSimulaciones {
+    border-collapse: collapse;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
+  }
+.tablaSimulaciones th{
+    border-bottom: 1px solid rgb(0, 0, 0);
+    border-right: 1px solid rgb(0, 0, 0);
+    background-color: rgb(216, 13, 13);
+    color: rgb(0, 0, 0);
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+.tablaSimulaciones td{
+    border-bottom: 1px solid rgb(0, 0, 0);
+    border-right: 1px solid rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+ 
 }

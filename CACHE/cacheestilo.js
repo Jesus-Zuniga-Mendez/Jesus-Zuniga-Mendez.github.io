@@ -289,28 +289,28 @@ function pagina3(){
 
 //esta funcion toma los datos de la tabla caracterirsticas y los almacena en la tabla de simulacion
 function addToLis(){
-  //se obtiene la referencia a la lista
-  var listaArchivos = document.getElementById('listaSimulaciones');
-  //se inicializa la variable que contendra los datos
-  var datosL1 = "L1 \t";
-  var datosL2 = "L2 \t";
-  var datosL3 = "L3 \t";
-  //se comprueba los niveles de cache que agrego el usuario
-  var numeroColumnas = 1;
+  //se obtiene la referencia a la tabla de donde se obtendran los daros
+  var tablaDatos = document.getElementById('tabla');
+  //se obtienen los datos de la tabla 
+  var datosL1 = ["L1"];
+  var datosL2 = ["L2"];
+  var datosL3 = ["L3"];
+  //se valida cuantos niveles de cache se seleccionaron
   var check = document.getElementById("checkSgteNivelL1");
+  var numeroColumnas = 1;
   if (check.checked) {
     numeroColumnas = 2;
   }
   var check = document.getElementById("checkSgteNivelL2");
   if (check.checked) {
     numeroColumnas = 3;
-  }   
-  // Se recorre la tabla por filas y despues por celdas
-  for (var i = 1; i < (tabla.rows.length - 1); i++) {
+  }
+  // Se recorre la tabla por filas y despues por celdas para obtener los  datos 
+  for (var i = 1; i < (tablaDatos.rows.length - 1); i++) {
     //se obtiene la fila
-    var fila = tabla.rows[i];
+    var fila = tablaDatos.rows[i];
     //Se recorre celda por celda
-    //var cantidadCeldas = fila.cells.length;
+    //var cantidadCeldas = fila.cells.length;    
     for (var j = 1; j <= numeroColumnas; j++) {
       //se obtiene la celda
       var celda = fila.cells[j]; // Obtener la referencia a la celda
@@ -320,28 +320,104 @@ function addToLis(){
       var valorSeleccionado = combobox.value;
       //se agrega el valor al string
       if (j == 1){
-        datosL1 += valorSeleccionado + "\t";
+        datosL1[i]= valorSeleccionado;
       }else if (j == 2){
-        datosL2 += valorSeleccionado + "\t";
+        datosL2[i]= valorSeleccionado;
       }else if (j == 3){
-        datosL3 += valorSeleccionado + "\t";
+        datosL3[i]= valorSeleccionado;
       }
     }
-    verificarLista();
-}
-var textoAlmacenar = datosL1 + "\n" + datosL2 + "\n" + datosL3 ;
-//listaArchivos.innerHTML = ''; // Limpiar la lista antes de agregar elementos nuevos
-var li = document.createElement('li');
-var boton = document.createElement('button');
-//boton,classList,add("botonNormal");
-boton.textContent = "Eliminar \t";
-boton.classList.add("eliminar");
-boton.addEventListener("click", borrarLineaLista);
-li.appendChild(boton);
-li.appendChild(document.createTextNode(textoAlmacenar));
-listaArchivos.appendChild(li);
+  }
+  //se crean el elemento li que contendra la tabla con los datos de cada simulacion
+  //se obtiene la referencia a la lista
+  var listaArchivos = document.getElementById('listaSimulaciones');
+  //se crea el li que va a contener la tala y el boton
+  var li = document.createElement('li');
+  //se crea el boton eliminar del li y se agrega a la lista 
+  var boton = document.createElement('button');
+  boton.textContent = "Eliminar \t";
+  boton.classList.add("eliminar");
+  boton.addEventListener("click", borrarLineaLista);
+  li.appendChild(boton);
+  //se crea la tabla que se almacenara en este elemento de la lista
+  var tablaPorCorrida = document.createElement('table');
+  tablaPorCorrida.classList.add('tablaSimulaciones');
+  //se llena la tabla con la informacion corrspondiente
+  
+  // Crea la fila de encabezado
+  var encabezado = tablaPorCorrida.createTHead().insertRow();
+  encabezado.insertCell().textContent = 'Nivel';
+  encabezado.insertCell().textContent = 'Capacidad (Kb)';
+  encabezado.insertCell().textContent = 'Asociatividad "ways"';
+  encabezado.insertCell().textContent = 'Tamaño del bloque (B)';
+  encabezado.insertCell().textContent = 'Politica de reemplazo';
+  encabezado.insertCell().textContent = 'Hit time (ciclos)';
+  encabezado.insertCell().textContent = 'Miss Penalty (ciclos)';
+  // Crea las filas de dato
+  var cantidadFilas = 0;
+  if (datosL1.length == 7){
+    cantidadFilas = 1;
+  }
+  if (datosL2.length == 7){
+    cantidadFilas = 2;
+  }
+  if (datosL3.length == 7){
+    cantidadFilas = 3;
+  }
+  for (var i = 0; i < cantidadFilas; i++) {
+    var datosIngresar;
+    if (i == 0){
+      datosIngresar = datosL1;
+    }else if (i == 1){
+      datosIngresar = datosL2;
+    }if (i == 2){
+      datosIngresar = datosL3;
+    }
+    var fila = tablaPorCorrida.insertRow();
+    fila.insertCell().textContent = datosIngresar[0];
+    fila.insertCell().textContent = datosIngresar[1];
+    fila.insertCell().textContent = datosIngresar[2];
+    fila.insertCell().textContent = datosIngresar[3];
+    fila.insertCell().textContent = datosIngresar[4];
+    fila.insertCell().textContent = datosIngresar[5];
+    fila.insertCell().textContent = datosIngresar[6];
+  }
+
+
+//en esta parte del codigo se revisa si se selecciono una corrida igual a las existentes
+var IngresarCorrida = true;  
+// Obtener todas las tablas dentro de los elementos <li> de la lista
+var tablas = listaArchivos.querySelectorAll('li table');
+
+// Recorrer las tablas obtenidas
+tablas.forEach(function(tabla) {
+  // Hacer algo con cada tabla
+  IngresarCorrida = false;
+  // Verificar el número de filas y columnas
+  if (tabla.rows.length !== tablaPorCorrida.rows.length || tabla.rows[0].cells.length !== tablaPorCorrida.rows[0].cells.length) {
+    console.log("filas distintas");
+    IngresarCorrida = true;
+  }
+
+  // Verificar el contenido de las celdas
+  for (let i = 0; i < tabla.rows.length; i++) {
+    for (let j = 0; j < tabla.rows[i].cells.length; j++) {
+      if (tabla.rows[i].cells[j].textContent !== tablaPorCorrida.rows[i].cells[j].textContent) {
+        IngresarCorrida = true;
+      }
+    }
+  }
+});
+
+if (IngresarCorrida == true){
+  li.appendChild(tablaPorCorrida);
+  listaArchivos.appendChild(li);
 }
 
+//console.log("funcion add lista");
+verificarLista();
+}
+//esta funcion borra una linea de la lista seleccionada por el usuario
 function borrarLineaLista(){
    // Obtener todos los botones con la clase "eliminar"
   var botonesEliminar = document.getElementsByClassName("eliminar");
@@ -352,11 +428,12 @@ function borrarLineaLista(){
       // Obtener el elemento padre del botón, que es la línea de la lista
       var linea = this.parentNode;
       linea.remove(); // Eliminar la línea de la lista
+      //console.log("funcion borrar lista");
+      verificarLista();
     };
   }
-  verificarLista();
 }
-// funcion que revisa si existen elementos en la lista de simulaciones
+// funcion que revisa si existen elementos en la lista de simulaciones para activar o no el vboton next
 function verificarLista() {
   //hace referencia a la lista
   var lista = document.getElementById("listaSimulaciones");
@@ -364,8 +441,8 @@ function verificarLista() {
   var elementos = lista.querySelectorAll("li"); 
   // Obtener la cantidad de elementos
   var cantidadElementos = elementos.length;
-  console.log("La lista tiene " + cantidadElementos + " elementos.");
-  if (cantidadElementos < 0){
+  //console.log("La lista tiene " + cantidadElementos + " elementos.");
+  if (cantidadElementos == 0){
     var elboton = document.getElementById("Next2");
     elboton.disabled = false;
     elboton.style.pointerEvents = "none";

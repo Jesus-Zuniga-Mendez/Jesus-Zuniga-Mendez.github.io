@@ -13,27 +13,30 @@
     <script src="librerias/pako.js"></script>
     <script src="cacheestilo.js"></script>
     <script src="cachelogica.js"></script>
+    <script src="librerias/chart.js"></script>
 </head>
 <body class="pagina0" onload="ajustarCaracteristicas()">
     <!-- pagina1 contien el paso 1 -->
     <div id="pagina1" class="pagina">
-        <div id="contenidoPagina1">
-            <p class="titulo">1: Seleccionar Traces</p>
-            <div class="file-input">
+        <div id="contenidoPagina1" class="contenedor">
+            <div class="contenedor"><p class="titulo">1: Seleccionar Traces</p></div>
+            <div class="contenedor">
+            <div class="file-input" >
                 <input type="file" id="archivoInput" class="input-file" accept=".zip" onchange="procesarArchivo(this)">
                 <label for="myFile" class="custom-button">Seleccionar archivo</label>
             </div>
             <button id="Next1" class="botonNext" onclick="pagina2()">Next</button>
-            <div id ="datosDelZip">
+            </div>
+            <div id ="datosDelZip" class="contenedor">
                 <!-- aqui se crean dinamicamente los controladores de la carga de archivos-->
             </div>                      
         </div>
     </div>
     <!-- pagina2 contien el paso 2 -->
     <div id="pagina2" class="pagina">
-        <div id="contenidoPagina2">
-            <p class="titulo">2: Caracteristicas del caché</p>
-            <div>
+        <div id="contenidoPagina2" class="contenedor">
+            <div class="contenedor"><p class="titulo">2: Caracteristicas del caché</p></div>
+            <div class="contenedor">
             <table class="tabla" id="tabla">
                 <!--Fila Encabezado-->
                 <tr>
@@ -99,24 +102,31 @@
                 </tr>                                               
             </table>
             </div> 
-            <div>
+            <div class="contenedor">
               <button id="AddToLis" class="botonNext" onclick="addToLis()">Add to list</button>
               <button id="Next2" class="botonNext" onclick="pagina3()">Next</button>
             </div>
-            <div id ="datosSeleccionados">
-                <!-- aqui se crean dinamicamente los controladores de la carga de archivos-->
-                <ul id="listaSimulaciones" class="lista-desplegable"></ul>
-            </div>           
         </div>
+        <div id ="datosSeleccionados"  class="contenedor">
+            <!-- aqui se crean dinamicamente las caracteristicas de simulaciones a realizar-->
+            <ul id="listaSimulaciones" class="lista-simulacion"></ul>
+        </div> 
+    </div>
+    <div id="pagina3" class="contenedor">
+        <div class="contenedor"><p class="titulo">3: Resumen de simulacion</p></div>
+
     </div>
     <!-- pagina 3 contien el paso 3-->
     <div id="pagina3" class="pagina">
         <div id="contenidoPagina2">
-            <p class="titulo">2: Simulación</p>
+            <p class="titulo">3: Simulación</p>
             <div>
-                <button id="simCompleta" class="botonNext" onclick="addToLisaaa()">Completa</button>
-                <button id="simStepOnStep" class="botonNext" onclick="pagina3aaa()">Paso a paso</button>
-              </div>   
+                <button id="simCompleta" class="botonNext" onclick="generarGrafico()">Completa</button>
+                <button id="simStepOnStep" class="botonNext" onclick="generarDoble()">Paso a paso</button>
+              </div> 
+            <div id="contenedorGraficos">
+                <canvas id="grafico"></canvas>
+            </div>  
         </div>
     </div>
 </body>
