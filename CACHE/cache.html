@@ -23,9 +23,10 @@
             <div class="contenedor">
             <div class="file-input" >
                 <input type="file" id="archivoInput" class="input-file" accept=".zip" onchange="procesarArchivo(this)">
-                <label for="myFile" class="custom-button">Seleccionar archivo</label>
-            </div>
-            <button id="Next1" class="botonNext" onclick="pagina2()">Next</button>
+                <label for="myFile" class="custom-button">Seleccionar</label>
+            </div>           
+            <button id="Predeterminado" class="botonNext" onclick="descargarArchivo()">Descargar</button>
+            <button id="Next1" class="botonNext" onclick="pagina2()">Siguiente</button>
             </div>
             <div id ="datosDelZip" class="contenedor">
                 <!-- aqui se crean dinamicamente los controladores de la carga de archivos-->
@@ -103,8 +104,8 @@
             </table>
             </div> 
             <div class="contenedor">
-              <button id="AddToLis" class="botonNext" onclick="addToLis()">Add to list</button>
-              <button id="Next2" class="botonNext" onclick="pagina3()">Next</button>
+              <button id="AddToLis" class="botonNext" onclick="addToLis()">Agregar</button>
+              <button id="Next2" class="botonNext" onclick="pagina3()">Siguiente</button>              
             </div>
         </div>
         <div id ="datosSeleccionados"  class="contenedor">
@@ -112,22 +113,46 @@
             <ul id="listaSimulaciones" class="lista-simulacion"></ul>
         </div> 
     </div>
-    <div id="pagina3" class="contenedor">
-        <div class="contenedor"><p class="titulo">3: Resumen de simulacion</p></div>
-
-    </div>
-    <!-- pagina 3 contien el paso 3-->
+    <!-- pagina3 contien el paso 3 -->
     <div id="pagina3" class="pagina">
-        <div id="contenidoPagina2">
-            <p class="titulo">3: Simulación</p>
-            <div>
-                <button id="simCompleta" class="botonNext" onclick="generarGrafico()">Completa</button>
-                <button id="simStepOnStep" class="botonNext" onclick="generarDoble()">Paso a paso</button>
-              </div> 
+        <div class="contenedor">
+            <p class="titulo">3: Simulacion</p>
+        </div>
+        <div class="contenedor">
+            <div class="contenedorParalelo">
+                <button id="Next2" class="botonNext" onclick="simularCadaCache(false)">Rápida (Solo obtener resultados)</button>
+            </div>
+            <div ></div>
+            <div class="contenedorParalelo">
+                <button id="Next2" class="botonNext" onclick="simularCadaCache(true)">Paso a paso (Ver comportamiento)</button>
+            </div>    
+            <div id="barraProgreso">
+                <div id="barraRelleno"></div>
+            </div>            
+        </div>
+    </div>
+    <div id="pantallaCarga" class="pantalla-carga">
+        <div class="spinner"></div>
+        <div class="mensaje-carga"></div>
+    </div>   
+    <!-- pagina 4 contien el paso 4-->
+    <div id="pagina4" class="pagina">
+        <div id="contenidoPagina2" class="contenedor">
+            <div class="contenedor">
+                <p class="titulo">4: Resultados</p>
+            </div>
+            <div class="contenedor">
+                <div>
+                    <button id="simCompleta" class="botonNext" onclick="generarGrafico()">Completa</button>
+                    <button id="simStepOnStep" class="botonNext" onclick="generarDoble()">Paso a paso</button>
+                </div> 
+            </div>
+        </div>
+        <div class="contenedor">
             <div id="contenedorGraficos">
                 <canvas id="grafico"></canvas>
             </div>  
-        </div>
+        </div>        
     </div>
 </body>
 </html>

@@ -11,6 +11,9 @@ function ajustarCaracteristicas(){
   //deshabilita el div de la pagina 3
   var ocultar = document.getElementById("pagina3");
   ocultar.classList.add("disabled"); // Para deshabilitar el div
+  //deshabilita el div de la pagina 4
+  var ocultar = document.getElementById("pagina4");
+  ocultar.classList.add("disabled"); // Para deshabilitar el div  
   //para desabilitar el boton next de la pagina 1
   var elboton = document.getElementById("Next1");
   elboton.disabled = false;
@@ -286,6 +289,16 @@ function pagina3(){
   ocultar.classList.remove("disabled");
   ocultar.scrollIntoView();
 }
+//esta funcion habilita la pagina 4 que es donde se reportaran los resultados
+function pagina4(){
+  //para oculatar el div de seleccion de archivos
+  var ocultar = document.getElementById("pagina3");
+  ocultar.classList.add("disabled");
+  //para habilitar el div simulacion de cache
+  var ocultar = document.getElementById("pagina4");
+  ocultar.classList.remove("disabled");
+  ocultar.scrollIntoView();
+}
 
 //esta funcion toma los datos de la tabla caracterirsticas y los almacena en la tabla de simulacion
 function addToLis(){
@@ -397,8 +410,7 @@ tablas.forEach(function(tabla) {
   if (tabla.rows.length !== tablaPorCorrida.rows.length || tabla.rows[0].cells.length !== tablaPorCorrida.rows[0].cells.length) {
     console.log("filas distintas");
     IngresarCorrida = true;
-  }
-
+  }else{
   // Verificar el contenido de las celdas
   for (let i = 0; i < tabla.rows.length; i++) {
     for (let j = 0; j < tabla.rows[i].cells.length; j++) {
@@ -406,6 +418,7 @@ tablas.forEach(function(tabla) {
         IngresarCorrida = true;
       }
     }
+  }
   }
 });
 
@@ -453,4 +466,12 @@ function verificarLista() {
     elboton.style.pointerEvents = "auto";
     elboton.style.opacity = 1;
   }
+}
+// funcion que permite descargar el traces.zip
+function descargarArchivo() {
+  var enlaceDescarga = document.createElement('a');
+  enlaceDescarga.href = 'traces/traces.zip'; // Ruta del archivo a descargar
+  enlaceDescarga.download = 'traces.zip'; // Nombre del archivo para descargar
+
+  enlaceDescarga.click();
 }
