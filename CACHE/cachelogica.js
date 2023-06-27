@@ -125,7 +125,7 @@ function simularTrace(verComportamiento,arrayCaches,cantidadConfiguraciones,trac
 function obtenerResultado(verComportamiento,arrayCaches,trace,descomprimido) {
   console.log("Resultados: ",trace, "# ", (promesasCompletadas+1));
   //variable que alcacenara todos los resultados
-  var resultados = "";
+  var resultado = "";
   //se recorre el archivo por lineas y se combierte a binario
   var nombreTrace = trace.slice(0, -12);
   var porLineas = descomprimido.split("\n");
@@ -148,15 +148,17 @@ function obtenerResultado(verComportamiento,arrayCaches,trace,descomprimido) {
       if (tamanioTransaccion != 0){
         acceso = L1.acceder(tipo,binario);   
       }else{
-        console.log("lineas leidas", contadorLineas);
-        console.log("lineas procesadas", L1.totalaccesos);
-        L1.limpiarCache();
+        //console.log("lineas leidas", contadorLineas);
+        //console.log("lineas procesadas", L1.totalaccesos);
       }
     }else{
       console.log("%cERROR: No existe el primer nivel de cache simulacion invalida", 'color: red;');
     }
   });
-  return nombreTrace + '\n' + resultados + '\n';
+  resultado = L1.totalaccesos + ",";
+  resultado = resultado + ((L1.totalmisses * 100) / L1.totalaccesos);
+  L1.limpiarCache();
+  return nombreTrace + "," + resultado + '\n';
 }
 
 
@@ -249,7 +251,6 @@ class Cache {
       this.totalescrituras = 0;
       this.totalmissesescritura = 0;
       this.totalmissrateescritura = 0;      
-      this.tiempoejecucion = 0;
     }else{
       console.log("No existe",tipo);
       this.tipo = tipo;
@@ -264,46 +265,48 @@ class Cache {
   acceder(tipo,binario) {
     this.totalaccesos++;
     var Esmiss = true;
-    //se completa a 64 bits
-    //binario = this.completarbinario(binario,this.tamaniodirecciones);
     //variables para encontrar el inico y final
-    var inicio = 1 
+    var inicio = 1;
     var final = this.tamniotag;
     //se saca el tag
-    //var tag = this.obtenerParteBinario(binario, inicio, final);    
-    //se saca el byteoffse
+    var tag = binario.substring((inicio-1), final);
+    //se saca el index
     inicio = final + 1;
     final = inicio + this.tamanioIndex - 1;
-    //var index = this.obtenerParteBinario(binario, inicio, final);
+    var index = binario.substring((inicio-1), final);
     //se saca el inde;
     inicio = final + 1;
     final = inicio + this.tamaniobyteOffset - 1;
-    //var byteOffse = this.obtenerParteBinario(binario, inicio, final);
+    var byteOffse = binario.substring((inicio-1), final);
     //se combierte el index a entero para poder ubicar la posicion de la tabla
-    //var indexEntero = parseInt(index, 2);
-      /*if (this.matriz[f][0] == index){
-        var columnaRevisar = 1;
-        for (let c = 1; c <= this.asociatividad; c++) { //ways, recorre cada uno de los tres datos por ways  
-          var validAlmacenado = this.matriz[f][columnaRevisar];
-          columnaRevisar++;
-          var tagAlmacenado = this.matriz[f][columnaRevisar];
-          columnaRevisar++;
-          var dataAlmacenado = this.matriz[f][columnaRevisar];
-          columnaRevisar++;
-          var LRUAlmacenado = this.matriz[f][columnaRevisar];
-          columnaRevisar++;  
-          /*if (this.totalaccesos == 1000){
+    var indexEntero = parseInt(index, 2);
+    if (this.matriz[indexEntero][0] == index){
+      var columnaRevisar = 1;
+      for (let c = 1; c <= this.asociatividad; c++) { //ways, recorre cada uno de los tres datos por ways  
+        var validAlmacenado = this.matriz[indexEntero][columnaRevisar];
+        var tagAlmacenado = this.matriz[indexEntero][columnaRevisar+1];
+        var dataAlmacenado = this.matriz[indexEntero][columnaRevisar+2];
+        var LRUAlmacenado = this.matriz[indexEntero][columnaRevisar+3];
+        columnaRevisar = columnaRevisar + 4;  
+        if ((tipo == "w") || (tipo == "W")){
+          if (tagAlmacenado == tag){
+          }else{
+            this.totalmisses ++;
+          }
+        }else if ((tipo == "r") || (tipo == "R")){         
+          if (tagAlmacenado == tag){
+          }else{
+            this.totalmisses ++;
+          }
+        }
+        /*if (this.totalaccesos == 1000){
             console.log("validAlmacenado",validAlmacenado);
             console.log("tagAlmacenado",tagAlmacenado);
             console.log("dataAlmacenado",dataAlmacenado);
             console.log("LRUAlmacenado",LRUAlmacenado);
-          } *//*       
-          if ((tipo == "w") || (tipo == "W")){
-          }else if ((tipo == "r") || (tipo == "R")){         
-          }
+          }*/       
         }
-      }
-    }  */     
+      }    
     return Esmiss;
   }
 
@@ -340,26 +343,11 @@ class Cache {
         }          
       }
     }*/
-    console.log("se vacia el cache");
+    //console.log("se vacia el cache");
     //console.log(this.matriz);
   }
 
-  obtenerParteBinario(binario, inicio, final){
-    var resultado = binario.substring((inicio-1), final);
-    return resultado;
-  }
 
-  completarbinario(binario,tamnio){
-    var completado;
-    var tamaniobinario = binario.length;
-    var faltantes = tamnio - tamaniobinario;
-    var complemento = "";
-    for(let i=1; i <= faltantes; i++){
-      complemento = complemento + "0";
-    }
-    completado = complemento + binario;
-    return completado;
-  }
 
   imprimeCaracteristicas(){
     if (this.existe){
