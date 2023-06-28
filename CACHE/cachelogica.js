@@ -49,7 +49,6 @@ function simularCadaCache(verComportamiento){
 async function simularConfiguracion(verComportamiento,titulo,cantidadConfiguraciones,arrayConfiguraciones) {
   // Muestra la pantalla de carga
   //se hace un array con los tracer que se seleccionaron
-  console.time('tiempo');
   document.getElementById('pantallaCarga').style.display = 'flex';
   var checkboxes = document.querySelectorAll("#listaArchivos input[type='checkbox']:checked");
   const arraydetraces = Array.from(checkboxes).map((checkbox) => checkbox.getAttribute("value"));
@@ -60,7 +59,6 @@ async function simularConfiguracion(verComportamiento,titulo,cantidadConfiguraci
   //cierra la pantalla de carga
   document.getElementById('pantallaCarga').style.display = 'none';
   console.log('Carga completada');
-  console.timeEnd('tiempo');
   //aqui se hace hace el proceso de descarga de los resultados de todas las simulaciones      
   // Crear un enlace de descarga
   var ArchivoDescargar = "Trace,Misses,MissRate,MissesLectura,MissRateLectura,MissesEscritura,MissRateEscritura\n";
@@ -178,7 +176,7 @@ class Cache {
   constructor(configuracion,tipo) {
     if (configuracion.length == 7){
       this.nombre = configuracion[0];
-      console.log("construyendo cache ",this.nombre);
+      //console.log("construyendo cache ",this.nombre);
       this.capacidad = configuracion[1];
       this.asociatividad = configuracion[2];
       this.tamannioBloque = configuracion[3];
@@ -263,7 +261,7 @@ class Cache {
       this.totalmissesescritura = 0;
       this.totalmissrateescritura = 0;      
     }else{
-      console.log("No existe",tipo);
+      //console.log("No existe",tipo);
       this.tipo = tipo;
       this.existe = false;
     }
@@ -298,8 +296,10 @@ class Cache {
       var inicioInstruccionesImprimir = 50000;
       var finInstruccionesImprimir = 50005;
       if ((this.totalaccesos >= inicioInstruccionesImprimir) && (this.totalaccesos <= finInstruccionesImprimir)){
-        imprimir = true;
-        console.log('%c acceso ','color: blue', this.totalaccesos.toString());
+        //imprimir = true;
+        if (imprimir){
+          console.log('%c acceso ','color: blue', this.totalaccesos.toString());
+        }
       }else{
         imprimir = false;
       }      
@@ -355,8 +355,10 @@ class Cache {
         }*/
         if (tagAlmacenado == tag){
           if (this.totalaccesos> inferiormuestreoHits){
-            imprimir = true;
-            console.log('%c acceso ','color: yellow', this.totalaccesos.toString());
+            //imprimir = true;
+            if (imprimir){
+              console.log('%c acceso ','color: yellow', this.totalaccesos.toString());
+            }
           }
           if (imprimir){
             console.log("fue hit");
@@ -384,8 +386,10 @@ class Cache {
       //y se suma el contador correspondiente 
       if (miss == true){
         if (this.totalaccesos> inferiormuestreoHits){
-          imprimir = true;
-          console.log('%c acceso ','color: green', this.totalaccesos.toString());
+          //imprimir = true;
+          if (imprimir){
+            console.log('%c acceso ','color: green', this.totalaccesos.toString());
+          }
         }
         if ((tipo == "w") || (tipo == "W")){
           //si es un miss y era escritura se suman los contadores
