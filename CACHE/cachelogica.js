@@ -54,8 +54,10 @@ async function simularConfiguracion(verComportamiento,titulo,cantidadConfiguraci
   const arraydetraces = Array.from(checkboxes).map((checkbox) => checkbox.getAttribute("value"));
   const totalTraces = arraydetraces.length;
   console.log("Traces a simular para cada configuracion",totalTraces);
+  console.time('tiempo');
   const promesas = arraydetraces.map((trace) => simularTrace(verComportamiento,cantidadConfiguraciones,trace,totalTraces,arrayConfiguraciones));
   const resultados = await Promise.all(promesas);
+  console.timeEnd('tiempo');
   //cierra la pantalla de carga
   document.getElementById('pantallaCarga').style.display = 'none';
   console.log('Carga completada');
@@ -65,6 +67,22 @@ async function simularConfiguracion(verComportamiento,titulo,cantidadConfiguraci
   for (let i = 0; i < resultados.length; i++){
     ArchivoDescargar = ArchivoDescargar + resultados[i];
   }
+
+  mediaGeometricaTotal = Math.pow(mediaGeometricaTotal, 1 / resultadosAlmacenados);
+  mediageometricaMissrateTotal = Math.pow(mediageometricaMissrateTotal, 1 / resultadosAlmacenados);
+  mediaGeomeLectura = Math.pow(mediaGeomeLectura, 1 / resultadosAlmacenados);
+  mediageometricaMissrateLectura = Math.pow(mediageometricaMissrateLectura, 1 / resultadosAlmacenados);
+  mediaGeometricaEscritura = Math.pow(mediaGeometricaEscritura, 1 / resultadosAlmacenados);
+  mediageometricaMissrateEscritura = Math.pow(mediageometricaMissrateEscritura, 1 / resultadosAlmacenados);
+  var lineaFinal = "MediaGeometrica,"+mediaGeometricaTotal+","+mediageometricaMissrateTotal+","+mediaGeomeLectura+","+mediageometricaMissrateLectura+","+mediaGeometricaEscritura+","+mediageometricaMissrateEscritura;
+  mediaGeometricaTotal = 1;
+  mediageometricaMissrateTotal = 1;
+  mediaGeomeLectura = 1;
+  mediageometricaMissrateLectura = 1;
+  mediaGeometricaEscritura = 1;
+  mediageometricaMissrateEscritura = 1;
+  resultadosAlmacenados = 0; 
+  ArchivoDescargar = ArchivoDescargar + lineaFinal;  
   var enlaceDescarga = document.createElement('a');
   enlaceDescarga.href = URL.createObjectURL(new Blob([ArchivoDescargar], { type: 'text/plain' }));
   enlaceDescarga.download = titulo + '.csv';
@@ -73,7 +91,7 @@ async function simularConfiguracion(verComportamiento,titulo,cantidadConfiguraci
   enlaceDescarga.click();
   // Liberar recursos del enlace de descarga
   URL.revokeObjectURL(enlaceDescarga.href);
-  pagina4();
+  pagina4(ArchivoDescargar);
 }
 
 //esta funcion descomprime cada trace y lo simula
@@ -98,7 +116,7 @@ function simularTrace(verComportamiento,cantidadConfiguraciones,trace,totalTrace
           //simulacion de cada configuracion de cache almacenada en tabla
           // Utilizar pako para descomprimir el contenido del archivo .gz 
           var descomprimido = pako.inflate(contenidoGz, { to: 'string' });
-          const resultado = obtenerResultado(verComportamiento,trace,descomprimido,arrayConfiguraciones);
+          const resultado = obtenerResultado(verComportamiento,trace,descomprimido,arrayConfiguraciones);      
           resolve(resultado);
           //console.log(trace);
           promesasCompletadas++;
@@ -120,10 +138,18 @@ function simularTrace(verComportamiento,cantidadConfiguraciones,trace,totalTrace
   });
 }
 
+var mediaGeometricaTotal = 1;
+var mediageometricaMissrateTotal = 1;
+var mediaGeomeLectura = 1;
+var mediageometricaMissrateLectura = 1;
+var mediaGeometricaEscritura = 1;
+var mediageometricaMissrateEscritura = 1;
+var resultadosAlmacenados = 0;
 function obtenerResultado(verComportamiento,trace,descomprimido,arrayConfiguraciones) {
   console.log("%c Resultados: ", 'color: red;' ,trace, "# ", (promesasCompletadas+1));
   //variable que alcacenara todos los resultados
   var resultado = "";
+  var caclulo = 0;
   //se recorre el archivo por lineas y se combierte a binario
   var nombreTrace = trace.slice(0, -12);
   var porLineas = descomprimido.split("\n");
@@ -164,6 +190,13 @@ function obtenerResultado(verComportamiento,trace,descomprimido,arrayConfiguraci
   resultado = resultado + ((L1.totalmisseslectura * 100) / L1.totallecturas) + ",";
   resultado = resultado + L1.totalmissesescritura + ",";
   resultado = resultado + ((L1.totalmissesescritura * 100) / L1.totalescrituras) + "\n";  
+  mediaGeometricaTotal = mediaGeometricaTotal * L1.totalmisses;
+  mediageometricaMissrateTotal = mediageometricaMissrateTotal * ((L1.totalmisses * 100) / L1.totalaccesos);
+  mediaGeomeLectura = mediaGeomeLectura *L1.totalmisseslectura;
+  mediageometricaMissrateLectura = mediageometricaMissrateLectura * ((L1.totalmisseslectura * 100) / L1.totallecturas);
+  mediaGeometricaEscritura = mediaGeometricaEscritura * L1.totalmissesescritura;
+  mediageometricaMissrateEscritura = mediageometricaMissrateEscritura * ((L1.totalmissesescritura * 100) / L1.totalescrituras);
+  resultadosAlmacenados++;
   //console.log(L1.matriz);
   //L1.limpiarCache();
   return resultado;
@@ -457,9 +490,23 @@ class Cache {
       const max = this.asociatividad;
       const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
       var columnainicio = ((randomNum -1)*4)+1;
+      /*if (this.totalaccesos>999900){
+        console.log("vlid",valid);
+        console.log("tag",tag);
+        console.log("binario",binario);
+        console.log("matriz sin modificar");
+        console.log(this.matriz[indexEntero].toString());
+        console.log("random generado");
+        console.log(randomNum);
+        console.log("columna a modificar",columnainicio);
+      }*/
       this.matriz[indexEntero][columnainicio] = valid;
-      this.matriz[indexEntero][columnaRevisar+1] = tag;
-      this.matriz[indexEntero][columnaRevisar+2] = binario;
+      this.matriz[indexEntero][columnainicio+1] = tag;
+      this.matriz[indexEntero][columnainicio+2] = binario;
+      /*if (this.totalaccesos>999900){
+        console.log("matriz modificada");
+        console.log(this.matriz[indexEntero].toString());
+      }*/     
     }else{
       console.log("else del actualizarreemplazo no deberia de salir");
     }
@@ -547,7 +594,7 @@ class Cache {
 
 
 
-
+/*
     function generarGrafico() {
       var canvas = document.getElementById("grafico");
       var ctx = canvas.getContext("2d");
@@ -559,6 +606,7 @@ class Cache {
       if (existingChart) {
         existingChart.destroy();
       }
+
       
       // Borrar el contenido del canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -589,7 +637,7 @@ class Cache {
       
     }
 
-
+*/
 
     function generarDoble() {
       var canvas = document.getElementById("grafico");
@@ -658,6 +706,12 @@ class Cache {
         options: options
       });
       
+      // Ajustar la resolución del gráfico
+      var devicePixelRatio = window.devicePixelRatio || 1; // Obtener el valor de resolución del dispositivo
+      myChart.canvas.style.width = (myChart.canvas.width / devicePixelRatio) + 'px';
+      myChart.canvas.style.height = (myChart.canvas.height / devicePixelRatio) + 'px';
+      myChart.canvas.width *= devicePixelRatio;
+      myChart.canvas.height *= devicePixelRatio;
     }
 
 

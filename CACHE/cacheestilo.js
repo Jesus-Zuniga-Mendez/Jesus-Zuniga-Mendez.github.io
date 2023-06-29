@@ -24,6 +24,11 @@ function ajustarCaracteristicas(){
   elboton.disabled = false;
   elboton.style.pointerEvents = "none";
   elboton.style.opacity = 0.6;
+  //para desabilitar el boton paso a paso  de la pagina 3
+  var elboton = document.getElementById("pasoapaso");
+  elboton.disabled = false;
+  elboton.style.pointerEvents = "none";
+  elboton.style.opacity = 0.6;  
   //llena la tabla de la pagina 2
   llenarTabla();
   bloquearTabla();
@@ -290,7 +295,8 @@ function pagina3(){
   ocultar.scrollIntoView();
 }
 //esta funcion habilita la pagina 4 que es donde se reportaran los resultados
-function pagina4(){
+var ArraydelcomboGlobal = [];
+function pagina4(textoDelCombo){
   //para oculatar el div de seleccion de archivos
   var ocultar = document.getElementById("pagina3");
   ocultar.classList.add("disabled");
@@ -298,6 +304,22 @@ function pagina4(){
   var ocultar = document.getElementById("pagina4");
   ocultar.classList.remove("disabled");
   ocultar.scrollIntoView();
+  //llena el combo con el nombre de los resultados
+  const datosArray = textoDelCombo.split('\n').map(row => row.split(','));
+  ArraydelcomboGlobal = datosArray;
+  var combobox = document.getElementById('Comboresultados');
+  var contadorFilas = 0;
+  datosArray.forEach(function(fila) {
+    contadorFilas++;
+    if ((contadorFilas == 1) || (contadorFilas == datosArray.length)) {
+      var primerElemento = fila[0];
+    }else{
+      var primerElemento = fila[0].substring(7);
+    }
+    var opcion = document.createElement('option');
+    opcion.text = primerElemento;
+    combobox.add(opcion);
+});
 }
 
 //esta funcion toma los datos de la tabla caracterirsticas y los almacena en la tabla de simulacion
@@ -421,6 +443,7 @@ tablas.forEach(function(tabla) {
   }
   }
 });
+
 
 if (IngresarCorrida == true){
   li.appendChild(tablaPorCorrida);

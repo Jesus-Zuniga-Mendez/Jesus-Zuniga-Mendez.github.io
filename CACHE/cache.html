@@ -124,7 +124,7 @@
             </div>
             <div ></div>
             <div class="contenedorParalelo">
-                <button id="Next2" class="botonNext" onclick="simularCadaCache(true)">Paso a paso (Ver comportamiento)</button>
+                <button id="pasoapaso" class="botonNext" onclick="simularCadaCache(true)">Paso a paso (Ver comportamiento)</button>
             </div>    
             <div id="barraProgreso">
                 <div id="barraRelleno"></div>
@@ -141,10 +141,12 @@
             <div class="contenedor">
                 <p class="titulo">4: Resultados</p>
             </div>
+            <div id="ccontenedordelcomboresultados" class = "contenedor">
+                <p class="subtitulo">Seleccione el grafico que desea ver</p><select id="Comboresultados"></select>                  
+            </div>
             <div class="contenedor">
                 <div>
-                    <button id="simCompleta" class="botonNext" onclick="generarGrafico()">Completa</button>
-                    <button id="simStepOnStep" class="botonNext" onclick="generarDoble()">Paso a paso</button>
+                    <button id="btngenerargraficco" class="botonNext" onclick="generarDoble()">Generar</button>
                 </div> 
             </div>
         </div>
