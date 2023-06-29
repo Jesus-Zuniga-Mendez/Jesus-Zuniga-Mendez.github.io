@@ -498,3 +498,12 @@ function descargarArchivo() {
 
   enlaceDescarga.click();
 }
+
+// funcion que permite descargar el traces.zip
+function descargarReadme() {
+  var enlaceDescarga = document.createElement('a');
+  enlaceDescarga.href = './README.md'; // Ruta del archivo a descargar
+  enlaceDescarga.download = 'README.md'; // Nombre del archivo para descargar
+
+  enlaceDescarga.click();
+}
