@@ -63,7 +63,9 @@ async function simularConfiguracion(verComportamiento,titulo,cantidadConfiguraci
   console.log('Carga completada');
   //aqui se hace hace el proceso de descarga de los resultados de todas las simulaciones      
   // Crear un enlace de descarga
-  var ArchivoDescargar = "Trace,Misses,MissRate,MissesLectura,MissRateLectura,MissesEscritura,MissRateEscritura\n";
+  //Hacer swap entre estas lineas para obtener diferentes encabezados de resultados
+  //var ArchivoDescargar = "Trace,Misses,MissRate,MissesLectura,MissRateLectura,MissesEscritura,MissRateEscritura\n";
+  var ArchivoDescargar = "Trace,MissesL1,MissRateL1,AMATL1,MissesL2,MissRateL2,AMATL2,MissesL3,MissRateL3,AMATL3\n";
   for (let i = 0; i < resultados.length; i++){
     ArchivoDescargar = ArchivoDescargar + resultados[i];
   }
@@ -74,13 +76,21 @@ async function simularConfiguracion(verComportamiento,titulo,cantidadConfiguraci
   mediageometricaMissrateLectura = Math.pow(mediageometricaMissrateLectura, 1 / resultadosAlmacenados);
   mediaGeometricaEscritura = Math.pow(mediaGeometricaEscritura, 1 / resultadosAlmacenados);
   mediageometricaMissrateEscritura = Math.pow(mediageometricaMissrateEscritura, 1 / resultadosAlmacenados);
-  var lineaFinal = "MediaGeometrica,"+mediaGeometricaTotal+","+mediageometricaMissrateTotal+","+mediaGeomeLectura+","+mediageometricaMissrateLectura+","+mediaGeometricaEscritura+","+mediageometricaMissrateEscritura;
+  mediaGeometricaAMATL1 = Math.pow(mediaGeometricaAMATL1, 1 / resultadosAlmacenados);
+  mediaGeometricaAMATL2 = Math.pow(mediaGeometricaAMATL2, 1 / resultadosAlmacenados);
+  mediaGeometricaAMATL3 = Math.pow(mediaGeometricaAMATL3, 1 / resultadosAlmacenados);
+  //var lineaFinal = "MediaGeometrica,"+mediaGeometricaTotal+","+mediageometricaMissrateTotal+","+mediaGeomeLectura+","+mediageometricaMissrateLectura+","+mediaGeometricaEscritura+","+mediageometricaMissrateEscritura;
+  var lineaFinal = "MediaGeometrica,"+mediaGeometricaTotal+","+mediageometricaMissrateTotal+","+mediaGeometricaAMATL1+","+","+","+mediaGeometricaAMATL2+","+","+","+mediaGeometricaAMATL3;
   mediaGeometricaTotal = 1;
   mediageometricaMissrateTotal = 1;
   mediaGeomeLectura = 1;
   mediageometricaMissrateLectura = 1;
   mediaGeometricaEscritura = 1;
   mediageometricaMissrateEscritura = 1;
+  mediaGeometricaAMATL1 = 1;
+  mediaGeometricaAMATL2 = 1;
+  mediaGeometricaAMATL3 = 1;
+
   resultadosAlmacenados = 0; 
   ArchivoDescargar = ArchivoDescargar + lineaFinal;  
   var enlaceDescarga = document.createElement('a');
@@ -144,6 +154,10 @@ var mediaGeomeLectura = 1;
 var mediageometricaMissrateLectura = 1;
 var mediaGeometricaEscritura = 1;
 var mediageometricaMissrateEscritura = 1;
+var mediaGeometricaAMATL1 = 1;
+var mediaGeometricaAMATL2 = 1;
+var mediaGeometricaAMATL3 = 1;
+
 var resultadosAlmacenados = 0;
 function obtenerResultado(verComportamiento,trace,descomprimido,arrayConfiguraciones) {
   console.log("%c Resultados: ", 'color: red;' ,trace, "# ", (promesasCompletadas+1));
@@ -163,6 +177,8 @@ function obtenerResultado(verComportamiento,trace,descomprimido,arrayConfiguraci
   // Recorrer cada línea del array
   //se recorre el archivo linea por linea
   var contadorLineas = 0;
+  //esta variable ayuda a controlar el llamado a distintos niveles
+  var fueMiss = true;
   porLineas.forEach(function(linea) {
     //cada linea esta en formato "tipo hex" entonces se divide por el caracter espacio
     contadorLineas++;
@@ -174,7 +190,17 @@ function obtenerResultado(verComportamiento,trace,descomprimido,arrayConfiguraci
     var binario = parseInt(hexadecimal, 16).toString(2).padStart(64, '0');
     if (L1.valido()){
       if (tamanioTransaccion != 0){
-        acceso = L1.acceder(tipo,binario);   
+        fueMiss = L1.acceder(tipo,binario);  
+        if (fueMiss){
+          if (L2.valido()){
+            fueMiss = L2.acceder(tipo,binario);  
+            if (fueMiss){
+              if (L3.valido()){
+                fueMiss = L3.acceder(tipo,binario);  
+              }              
+            }
+          }         
+        }  
       }else{
         //console.log("lineas leidas", contadorLineas);
         //console.log("lineas procesadas", L1.totalaccesos);
@@ -183,22 +209,51 @@ function obtenerResultado(verComportamiento,trace,descomprimido,arrayConfiguraci
       console.log("%cERROR: No existe el primer nivel de cache simulacion invalida", 'color: red;');
     }
   });
+
+  //AMAT → Average Memory Access Time
+  //AMAT = Hit time + Miss rate * Miss Penalty
+  //AMAT = L1 Hit time + L1 Miss rate * (L2 Hit time + L2 Miss rate * L2 Miss penalty)
+  //esta variable sirve para quitar algunos resultados, si se quieren los de lectura y escritura
+  //en el resultado final hacer un awapp entre esta variable y resultado
+  //pejm:     Dumieresultado  -->>>>  resultado
+  var Dumieresultado = "";
   resultado = resultado + nombreTrace + ",";
+  //para L1
   resultado = resultado + L1.totalmisses + ",";
-  resultado = resultado + ((L1.totalmisses * 100) / L1.totalaccesos) + ",";
-  resultado = resultado + L1.totalmisseslectura + ",";
-  resultado = resultado + ((L1.totalmisseslectura * 100) / L1.totallecturas) + ",";
-  resultado = resultado + L1.totalmissesescritura + ",";
-  resultado = resultado + ((L1.totalmissesescritura * 100) / L1.totalescrituras) + "\n";  
+  var missRateTOTALL1 = ((L1.totalmisses * 100) / L1.totalaccesos);
+  resultado = resultado + missRateTOTALL1 + ",";
+  resultado = resultado + (L1.hitTime + (missRateTOTALL1 * L1.missPenalty)) + ","
+  //para L2
+  resultado = resultado + L2.totalmisses + ",";
+  var missRateTOTALL2 = ((L2.totalmisses * 100) / L2.totalaccesos);
+  resultado = resultado + missRateTOTALL2 + ",";
+  resultado = resultado + (L1.hitTime + (missRateTOTALL1 * (L2.hitTime + (missRateTOTALL2 * L2.missPenalty)))) + ","
+  //para L3
+  resultado = resultado + L3.totalmisses + ",";
+  var missRateTOTALL3 = ((L3.totalmisses * 100) / L3.totalaccesos);
+  resultado = resultado + missRateTOTALL3 + ",";  
+  resultado = resultado + (L1.hitTime + (missRateTOTALL1 *(L2.hitTime + (missRateTOTALL2 * (L3.hitTime + (missRateTOTALL3 * L3.missPenalty)))))) + "\n"
+
+  Dumieresultado = resultado + L1.totalmisseslectura + ",";
+  Dumieresultado = resultado + ((L1.totalmisseslectura * 100) / L1.totallecturas) + ",";
+  Dumieresultado = resultado + L1.totalmissesescritura + ",";
+  Dumieresultado = resultado + ((L1.totalmissesescritura * 100) / L1.totalescrituras) + "\n";  
   mediaGeometricaTotal = mediaGeometricaTotal * L1.totalmisses;
   mediageometricaMissrateTotal = mediageometricaMissrateTotal * ((L1.totalmisses * 100) / L1.totalaccesos);
   mediaGeomeLectura = mediaGeomeLectura *L1.totalmisseslectura;
   mediageometricaMissrateLectura = mediageometricaMissrateLectura * ((L1.totalmisseslectura * 100) / L1.totallecturas);
   mediaGeometricaEscritura = mediaGeometricaEscritura * L1.totalmissesescritura;
   mediageometricaMissrateEscritura = mediageometricaMissrateEscritura * ((L1.totalmissesescritura * 100) / L1.totalescrituras);
+
+  mediaGeometricaAMATL1 = mediaGeometricaAMATL1 * (L1.hitTime + (missRateTOTALL1 * L1.missPenalty));
+  mediaGeometricaAMATL2 = mediaGeometricaAMATL2 * (L1.hitTime + (missRateTOTALL1 * (L2.hitTime + (missRateTOTALL2 * L2.missPenalty))));
+  mediaGeometricaAMATL3 = mediaGeometricaAMATL3 * (L1.hitTime + (missRateTOTALL1 *(L2.hitTime + (missRateTOTALL2 * (L3.hitTime + (missRateTOTALL3 * L3.missPenalty))))));
   resultadosAlmacenados++;
   //console.log(L1.matriz);
   //L1.limpiarCache();
+  L1.imprimirCache;
+  L2.imprimirCache;
+  L3.imprimirCache;
   return resultado;
 }
 
@@ -465,7 +520,8 @@ class Cache {
       }
     }else{
       console.log("Este es el if del index no deberia de salir");
-    }              
+    }   
+    Esmiss = miss;           
     return Esmiss;
   }
 

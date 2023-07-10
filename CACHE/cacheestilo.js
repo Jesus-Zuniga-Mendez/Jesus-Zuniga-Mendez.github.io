@@ -50,10 +50,10 @@ function llenarTabla(){
       //filtro que permite llenar los combos a necesidad
       if (i == 1) {
         inicio = 3;
-        fin = 7;
+        fin = 11;
       }else if(i == 2){
         inicio = 0;
-        fin = 4;        
+        fin = 6;        
       }else if(i == 3){
         inicio = 4;
         fin = 7;        
