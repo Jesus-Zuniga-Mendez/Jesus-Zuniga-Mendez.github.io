@@ -13,9 +13,9 @@ para correr una simulacion siga los siguientes pasos
         si no cuenta con un archivo puede descargar un ejemplo con el boton descargar
     2 seleccionar el trace que desea simular de la lista, marcandolo con un check
     3 dar click sobre el boton siguiente
-    4 seleccionar las caracteristicas del cache a simular (en esta version unicamente funciona el cahce L1)
+    4 seleccionar las caracteristicas del cache a simular incluyendo su opcion multinivel
     5 dar click sobre el boton siguiente
     6 escoger el tipo de simulacion
         rapida(el algoritmo procesa las simulaciones y devuelve un csv con los resultadps)
         paso a paso (ver una simulacion paso a paso de la simulacion)
-    7 Observar los resultados
+    7 Observar en los resultados el MissRate y el AMAT
